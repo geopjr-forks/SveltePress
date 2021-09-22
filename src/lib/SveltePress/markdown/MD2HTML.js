@@ -1,11 +1,10 @@
-import md2fm from '$lib/SveltePress/markdown/MD2FM';
 import { mdConverter } from '$lib/SveltePress/markdown/MDConverter';
 import { getContent } from '$lib/SveltePress/SveltePressData';
 
 import { readFileSync, existsSync } from 'fs';
 import path from 'path';
 
-export function md2html(post) {
+export async function md2html(post) {
 	try {
 		let md = '';
 
@@ -35,12 +34,12 @@ export function md2html(post) {
 			md = getContent().get(`${post}.md`);
 		}
 
-		const frontmatter = md2fm(md);
-		const content = mdConverter(frontmatter.body);
+		// const frontmatter = md2fm(md);
+		const content = await mdConverter(md);
 		// meta includes ALL fm attributes
 		return {
-			body: content,
-			meta: frontmatter.attributes || {}
+			body: content.code,
+			meta: content.data?.fm || {}
 		};
 	} catch (e) {
 		return {

@@ -4,7 +4,7 @@ import path from 'path';
 import Jsesc from 'jsesc';
 import Config from '../sveltePress.config.js';
 
-export default function createPressData(
+export default async function createPressData(
 	source = 'pages/',
 	generateIndex = false,
 	generateSearchIndex = false,
@@ -36,7 +36,7 @@ export default function createPressData(
 		const relativePath = path.relative('pages/', source + '/' + item.name);
 		if (item.isDirectory()) {
 			// Recursively get all sub-folders and files
-			const nestedFolder = createPressData(
+			const nestedFolder = await createPressData(
 				path.join(source, item.name),
 				generateIndex,
 				generateSearchIndex,
@@ -72,7 +72,7 @@ export default function createPressData(
 			const date =
 				item.date?.toGMTString() ?? statSync(path.join(source, item.name)).mtime.toGMTString();
 			const noCase = item.name.replace(/\.[^/.]+$/, '');
-			const fm = md2fm(readFileSync(`${source}/${noCase}.md`).toString());
+			const fm = await md2fm(readFileSync(`${source}/${noCase}.md`).toString());
 			const body = new Map([
 				['name', noCase],
 				['postName', fm.attributes.postName || noCase],

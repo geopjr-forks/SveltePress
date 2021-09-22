@@ -1,9 +1,9 @@
 import { getSide, getNav } from '$lib/SveltePress/SveltePressData';
 
 // Sidebar & navbar gets saved in session
-export function getSession() {
+export async function getSession() {
 	return new Map([
-		['sidebar', getSide()],
-		['navbar', getNav()]
+		['sidebar', await getSide()],
+		['navbar', await getNav()]
 	]);
 }

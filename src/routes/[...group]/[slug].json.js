@@ -2,8 +2,8 @@ import { md2html } from '$lib/SveltePress/markdown/MD2HTML';
 import { getData } from '$lib/SveltePress/SveltePressData';
 
 // Gets current folder from spData used to get the file
-function getFolder(folderStructure) {
-	let folder = getData();
+async function getFolder(folderStructure) {
+	let folder = await getData();
 	if (folderStructure.length > 0) {
 		const folders = folderStructure.split('/');
 		for (let i = 0; i < folders.length; i++) {
@@ -53,20 +53,20 @@ function getPagination(folder, slug) {
 }
 
 // Handle post request
-export function post({ params, body }) {
+export async function post({ params, body }) {
 	// Get slug and group either from post body
 	// if avaliable, else from params (not always correct)
 	const { slug, group } = body ?? params;
 
 	let post = group + '/' + slug;
 
-	const content = md2html(post);
+	const content = await md2html(post);
 
 	if (content.error) {
 		return { body: content };
 	}
 
-	let folder = getFolder(group);
+	let folder = await getFolder(group);
 
 	let file = getFile(folder, slug);
 

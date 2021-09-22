@@ -30,8 +30,8 @@ function createSidebarFolder(folder) {
 	return response;
 }
 
-export default function createSidebar(generateIndex = false) {
-	const data = createPressData(path.resolve('pages/'))[0];
+export default async function createSidebar(generateIndex = false) {
+	const data = (await createPressData(path.resolve('pages/')))[0];
 	const parentMap = new Map();
 	const sidebar = new Map();
 
